@@ -68,6 +68,7 @@ This page demonstrates a technique for setting up a chain of audio effects using
         else event.target.innerText = "ERROR - could not load sample"
     }
     triggerButton.addEventListener("click", buttonActions);
+     triggerButton.addEventListener("click", () => Nexus.context.resume());
     
     var interval = new Nexus.Interval(800, function() {
       console.log('beep');
