@@ -1,0 +1,68 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>ToneJS Effects</title>
+    <meta name="author" content="Phill Phelps" />
+    <meta name="date" content="January 12th 2017" />
+    
+    <style>
+        p#description {
+            background-color: rgb(200,200,200);
+            font-family: sans-serif;
+        }
+
+        button {
+            background-color: red;
+            color: yellow;
+
+            font-size: 2em;
+            font-family: sans-serif;
+        }
+        
+    </style>
+    
+    <script src="tonejs/unmute-v013.js" data-add-button="true"></script>
+    <script src="tonejs/tone-v13.js"></script>
+    
+</head>
+<body id="mainBody" width="100%" height="100%">
+
+<p id="description">
+This page demonstrates a technique for setting up a chain of audio effects using the ToneJS library.
+</p>
+
+<div id="controlsArea">
+    <button id="triggerButton">Trigger sample</button> <br>
+    LFO rate: <input id="lfoRate" type="range" min="0.2" max="10" value="1.2"></input>
+</div>
+
+<script>
+    // load the sample
+    var player = new Tone.Player("baltimore.mp3");
+    
+    // set up a distortion and filter
+    var dist = new Tone.Distortion(1.2);
+    var filt = new Tone.Filter(500, "lowpass");
+    
+    // set up a LFO to modulate the filter
+    var lfo = new Tone.LFO("1.7Hz", 200, 1800);
+    lfo.connect(filt.frequency);
+    lfo.start();
+    
+    // connect the signal chain
+    player.connect(dist);
+    dist.connect(filt);
+    filt.connect(Tone.Master);
+
+    // you'll need to add event listener code for the LFO rate slider
+
+    // here we set up an event listener for button clicks
+    var triggerButton = document.getElementById("triggerButton");
+    var buttonActions = function(event) {
+        if (player.loaded) player.start();
+        else event.target.innerText = "ERROR - could not load sample"
+    }
+    triggerButton.addEventListener("click", buttonActions);
+    
+</script>
+
